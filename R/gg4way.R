@@ -1,8 +1,8 @@
 #' @title Create a 4way plot
 #' @order 2
 #' @usage NULL
-#' @description Create a 4way plot to comparison the logFC values from
-#'  two contrasts of differential gene expression
+#' @description Create a 4way plot to compare the logFC values from
+#'  two contrasts of differential gene expression.
 #' @param DGEdata The object to plot from:
 #' \itemize{
 #' \item \code{limma:} A \link[limma:MArrayLM-class]{MArrayLM} object from
@@ -259,8 +259,17 @@ gg4way.list <- function(DGEdata,
                            ...)
 
     }else if (all(vapply(DGEdata, is.data.frame, logical(1)))) {
+        if (missing(ID)) {ID <- "ID"}
+        if (missing(symbol)) {symbol <- "symbol"}
+        if (missing(logFC)) {logFC <- "logFC"}
+        if (missing(FDR)) {FDR <- "adj.P.Val"}
+
         DGEdata %>%
             gg4way.default(DGEdata = .,
+                           ID = ID,
+                           symbol = symbol,
+                           logFC = logFC,
+                           FDR = FDR,
                            ...)
     }else{
         stop("Objects in list or their combination are not supported")
@@ -303,6 +312,35 @@ gg4way.DESeqDataSet <- function(DGEdata,
                        tibble::rownames_to_column("ID") %>%
                        tibble::as_tibble()) %>%
         gg4way.default(DGEdata = .,
+                       ID = ID,
+                       symbol = symbol,
+                       logFC = logFC,
+                       FDR = FDR,
+                       ...)
+}
+
+#' @rdname gg4way
+#' @usage NULL
+#' @importFrom purrr map
+#' @importFrom tibble rownames_to_column
+#' @export
+#'
+gg4way.SimpleList <- function(DGEdata = .,
+                              ID = ID,
+                              symbol = symbol,
+                              logFC = logFC,
+                              FDR = FDR,
+                              ...){
+    if (missing(ID)) {ID <- "ID"}
+    if (missing(symbol)) {symbol <- "symbol"}
+    if (missing(logFC)) {logFC <- "LogFC"}
+    if (missing(FDR)) {FDR <- "FDR"}
+
+    DGEdata |>
+        purrr::map(~ .x |>
+                       as.data.frame() |>
+                       tibble::rownames_to_column("ID")) |>
+        gg4way.default(DGEdata = _,
                        ID = ID,
                        symbol = symbol,
                        logFC = logFC,

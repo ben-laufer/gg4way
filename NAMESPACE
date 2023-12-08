@@ -2,6 +2,7 @@
 
 S3method(gg4way,DESeqDataSet)
 S3method(gg4way,MArrayLM)
+S3method(gg4way,SimpleList)
 S3method(gg4way,default)
 S3method(gg4way,list)
 export(getCor)

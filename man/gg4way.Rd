@@ -6,6 +6,7 @@
 \alias{gg4way.MArrayLM}
 \alias{gg4way.list}
 \alias{gg4way.DESeqDataSet}
+\alias{gg4way.SimpleList}
 \title{Create a 4way plot}
 \usage{
 \method{gg4way}{default}(
@@ -87,8 +88,8 @@ and \code{gg4way.DESeqDataSet}}
 A \link[ggplot2]{ggplot}
 }
 \description{
-Create a 4way plot to comparison the logFC values from
-two contrasts of differential gene expression
+Create a 4way plot to compare the logFC values from
+two contrasts of differential gene expression.
 }
 \details{
 When a list of data.frames is provided to the \code{DGEdata} argument,
