@@ -1,3 +1,7 @@
+# gg4way 1.0.2 
+
+* Improved warning for when genes are not shared by both contrasts
+
 # gg4way 1.0.1
 
 * Minor fix to add support for custom column names to lists of data.frames
