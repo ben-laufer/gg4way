@@ -9,14 +9,14 @@
 \arguments{
 \item{DGEtibble}{A \link[tibble:tbl_df-class]{tibble} of DGE results}
 
-\item{x}{Character specifying name of DGE results within object
+\item{x}{Character specifying the name of DGE results within the object
 for the x-axis}
 
-\item{y}{Character specifying name of DGE results within object
+\item{y}{Character specifying the name of DGE results within the object
 for the y-axis}
 
-\item{logFCcutoff}{Numeric for the absolute Log2FC cut-off for DEGs,
-default is 1}
+\item{logFCcutoff}{Numeric for the absolute logFC cut-off for DEGs
+(default is 1)}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble}

@@ -14,50 +14,54 @@
 #'  \link[DESeq2]{DESeq} or a list of
 #'  \link[DESeq2:DESeqResults-class]{DESeqResults} from \link[DESeq2]{results}
 #'  \item \code{Other packages:} A list of data.frames,
-#'   see details section for more infromation
+#'   see details section for more information
 #' }
-#' @param x Character specifying name of DGE results within object
+#' @param x Character specifying the name of DGE results within the object
 #'  for the x-axis
-#' @param y Character specifying name of DGE results within object
+#' @param y Character specifying the name of DGE results within the object
 #'  for the y-axis
 #' @param sep Character specifying the separator between conditions
-#'  for the contrast
-#' @param ID Column name for gene ID
-#' @param symbol Column name for gene symbol description
+#'  for the contrast name provided to the x and y arguments
+#' @param ID Column name for gene IDs
+#' @param symbol Column name for gene symbols, which can be the same as the
+#'  value for the ID column if not present in the object
 #' @param logFC Column name for logFC values
 #' @param FDR Column name for FDR values
-#' @param FDRcutoff Numeric for the FDR cut-off for DEGs, default is 0.05
-#' @param logFCcutoff Numeric for the absolute Log2FC cut-off for DEGs,
-#'  default is 1
-#' @param label Character vector specifying genes to label
+#' @param FDRcutoff Numeric for the FDR cut-off for DEGs (default is 0.05)
+#' @param logFCcutoff Numeric for the absolute logFC cut-off for DEGs
+#'  (default is 1)
+#' @param label Character vector specifying the symbols of genes to label
 #'  (FALSE for none, TRUE for all blue)
 #' @param colorVector Character vector of colors in the following order:
 #' "not significant", "significant in x", "significant in y",
 #'  "significant in both"
 #' @param lineColor Color of lines
 #' @param textSize Numeric specifying size of text with gene
-#'  overlap category totals
+#'  overlap category totals, where 0 will remove the text
 #' @param textNudge Numeric specifying nudge of text with gene
 #'  overlap category totals
 #' @param ... Support for additional arguments used internally by
 #'  \code{gg4way.MArrayLM}, \code{gg4way.list},
 #'  and \code{gg4way.DESeqDataSet}
 #' @details
-#' When a list of data.frames is provided to the \code{DGEdata} argument,
-#' they should have the following column names and data:
+#' When a named list of data.frames is provided to the \code{DGEdata} argument,
+#' each data.frame can follow the defaults and have the following columns or
+#' specify alternate names for the following to the ID, symbol, logFC, and FDR
+#' arguments:
 #'  \tabular{ll}{
 #'   \code{ID} \tab Character vector with the feature ID (i.e. EnsemblID) \cr
 #'   \tab \cr
 #'   \code{symbol} \tab Optional character vector with gene symbol for labels \cr
 #'   \tab \cr
-#'   \code{LogFC} \tab Numeric with the logFC \cr
+#'   \code{logFC} \tab Numeric with the logFC \cr
 #'   \tab \cr
-#'   \code{FDR} \tab Numeric with the FDR \cr
+#'   \code{adj.P.Val} \tab Numeric with the FDR \cr
 #'   }
-#'
 #' The correlation coefficient is useful for comparing across multiple plots.
-#'  It's important to consider whether there are any common factors when
-#'  comparing values, since that can result in a larger value.
+#'  However, it is important to consider whether there are any common factors
+#'  when comparing values, since that can result in a larger value. Some
+#'  examples are contrasts with covariates that are shared between groups
+#'  or contrasts with the same control group.
 #' @return A \link[ggplot2]{ggplot}
 #' @export
 #'
@@ -69,10 +73,6 @@ gg4way <- function(DGEdata,
 #' @rdname gg4way
 #' @order 1
 #' @name gg4way
-#' @importFrom rlang warn sym
-#' @importFrom glue glue_collapse
-#' @importFrom dplyr filter pull
-#' @importFrom janitor tabyl
 #' @importFrom purrr set_names
 #' @examples
 #' data("airwayFit")
@@ -102,21 +102,20 @@ gg4way.default <- function(DGEdata,
     if (is.null(symbol)) {
         symbol <- "ID"
     }
-    stopifnot(c(x,y) %in% names(DGEdata))
+    stopifnot(c(x, y) %in% names(DGEdata))
 
-    missingFeatures <- c(DGEdata[[x]]$ID, DGEdata[[y]]$ID) %>%
-        janitor::tabyl() %>%
-        dplyr::filter(n == 1) %>%
-        dplyr::pull(1)
+    .checkNames(DGEdata = DGEdata,
+                x = x,
+                y = y,
+                ID = ID,
+                symbol = symbol,
+                logFC = logFC,
+                FDR = FDR)
 
-    if (!identical(missingFeatures, character(0))) {
-        rlang::warn(paste(x, "and", y, "don't have some genes IDs in common.",
-                          length(missingFeatures), "IDs will be filtered out:",
-                          glue::glue_collapse({missingFeatures},
-                                              sep = ", ",
-                                              width = 37)),
-                    use_cli_format = TRUE)
-    }
+    .checkFeatures(DGEdata = DGEdata,
+                   x = x,
+                   y = y,
+                   ID = ID)
 
     DGEtibble <- .prepareData(DGEdata = DGEdata,
                               x = x,
@@ -182,7 +181,7 @@ gg4way.MArrayLM <- function(DGEdata,
     if (missing(ID)) {ID <- "ID"}
     if (missing(symbol)) {symbol <- "symbol"}
     if (missing(logFC)) {logFC <- "logFC"}
-    if (missing(FDR)){ FDR <- "adj.P.Val"}
+    if (missing(FDR)) {FDR <- "adj.P.Val"}
 
     ## magrittr pipe used due to need for unnamed placeholder
     DGEdata$contrasts %>%

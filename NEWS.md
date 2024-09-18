@@ -1,3 +1,7 @@
+# gg4way 1.3.1
+
+* Helper functions to check DGEdata and a visual unit test
+
 # gg4way 1.1.3
 
 * Legend improvements

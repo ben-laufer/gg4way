@@ -1,3 +1,72 @@
+#' @title Missing names check
+#' @description Check for missing names in the DGEdata object
+#' @keywords internal
+#' @inheritParams gg4way
+#' @return A character
+#' @importFrom magrittr extract
+#' @importFrom purrr map imap list_c
+#' @importFrom dplyr setdiff
+#' @importFrom glue glue glue_collapse
+#' @importFrom rlang abort
+#'
+.checkNames <- function(DGEdata = DGEdata,
+                        x = x,
+                        y = y,
+                        ID = ID,
+                        symbol = symbol,
+                        logFC = logFC,
+                        FDR = FDR){
+    missingList <- DGEdata |>
+        magrittr::extract(c(x, y)) |>
+        purrr::map(\(contrastData)
+                   dplyr::setdiff(c(ID, symbol, logFC, FDR),
+                                  names(contrastData)))
+
+    errorMessage <- missingList |>
+        purrr::imap(\(missingNames, listName)
+                    if (length(missingNames) > 0) {
+                        glue::glue("{listName} is missing column name(s): {missing}",
+                                   missing = glue::glue_collapse(missingNames,
+                                                                 sep = ", "))
+                    }) |>
+        purrr::list_c()
+
+    if( length(errorMessage) > 0) {
+        rlang::abort(errorMessage)
+    }
+}
+
+#' @title Missing features warning
+#' @description Warn about features not shared between x and y
+#' @keywords internal
+#' @inheritParams gg4way
+#' @return A character
+#' @importFrom dplyr pull filter
+#' @importFrom janitor tabyl
+#' @importFrom rlang warn
+#' @importFrom glue glue_collapse
+#'
+.checkFeatures <- function(DGEdata = DGEdata,
+                           x = x,
+                           y = y,
+                           ID = ID){
+    missingFeatures <- c(DGEdata[[x]] |>
+                             dplyr::pull(!!ID),
+                         DGEdata[[y]] %>%
+                             dplyr::pull(!!ID)) |>
+        janitor::tabyl() |>
+        dplyr::filter(n == 1) |>
+        dplyr::pull(1)
+
+    if (!identical(missingFeatures, character(0))) {
+        rlang::warn(paste(x, "and", y, "don't have some genes IDs in common.",
+                          length(missingFeatures), "IDs will be filtered out:",
+                          glue::glue_collapse({missingFeatures},
+                                              sep = ", ",
+                                              width = 37)))
+    }
+}
+
 #' @title Prepare data
 #' @description Prepare data for a 4way plot
 #' @keywords internal
@@ -221,6 +290,8 @@
 #' @importFrom stringr str_split str_pad
 #' @importFrom rlang expr
 #' @importFrom purrr flatten_chr
+#' @importFrom scales alpha
+#' @importFrom ggrepel geom_label_repel
 #'
 .plot4way <- function(DGEtibble = DGEtibble,
                       x = x,

@@ -1,6 +1,6 @@
 Package: gg4way
 Title: 4way Plots of Differential Expression
-Version: 1.3.0
+Version: 1.3.1
 Authors@R: c(
     person(given = c("Benjamin", "I"),
            family = "Laufer",
@@ -24,7 +24,7 @@ biocViews:
     Sequencing
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Depends:
     R (>= 4.3.0),
     ggplot2
@@ -51,7 +51,8 @@ Suggests:
     knitr,
     org.Hs.eg.db,
     rmarkdown,
-    testthat
+    testthat,
+    vdiffr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: false

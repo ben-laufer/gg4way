@@ -40,32 +40,33 @@ or \link[edgeR]{glmLRT}
 \link[DESeq2]{DESeq} or a list of
 \link[DESeq2:DESeqResults-class]{DESeqResults} from \link[DESeq2]{results}
 \item \code{Other packages:} A list of data.frames,
-see details section for more infromation
+see details section for more information
 }}
 
-\item{x}{Character specifying name of DGE results within object
+\item{x}{Character specifying the name of DGE results within the object
 for the x-axis}
 
-\item{y}{Character specifying name of DGE results within object
+\item{y}{Character specifying the name of DGE results within the object
 for the y-axis}
 
-\item{ID}{Column name for gene ID}
+\item{ID}{Column name for gene IDs}
 
-\item{symbol}{Column name for gene symbol description}
+\item{symbol}{Column name for gene symbols, which can be the same as the
+value for the ID column if not present in the object}
 
 \item{logFC}{Column name for logFC values}
 
 \item{FDR}{Column name for FDR values}
 
 \item{sep}{Character specifying the separator between conditions
-for the contrast}
+for the contrast name provided to the x and y arguments}
 
-\item{FDRcutoff}{Numeric for the FDR cut-off for DEGs, default is 0.05}
+\item{FDRcutoff}{Numeric for the FDR cut-off for DEGs (default is 0.05)}
 
-\item{logFCcutoff}{Numeric for the absolute Log2FC cut-off for DEGs,
-default is 1}
+\item{logFCcutoff}{Numeric for the absolute logFC cut-off for DEGs
+(default is 1)}
 
-\item{label}{Character vector specifying genes to label
+\item{label}{Character vector specifying the symbols of genes to label
 (FALSE for none, TRUE for all blue)}
 
 \item{colorVector}{Character vector of colors in the following order:
@@ -75,7 +76,7 @@ default is 1}
 \item{lineColor}{Color of lines}
 
 \item{textSize}{Numeric specifying size of text with gene
-overlap category totals}
+overlap category totals, where 0 will remove the text}
 
 \item{textNudge}{Numeric specifying nudge of text with gene
 overlap category totals}
@@ -92,21 +93,24 @@ Create a 4way plot to compare the logFC values from
 two contrasts of differential gene expression.
 }
 \details{
-When a list of data.frames is provided to the \code{DGEdata} argument,
-they should have the following column names and data:
+When a named list of data.frames is provided to the \code{DGEdata} argument,
+each data.frame can follow the defaults and have the following columns or
+specify alternate names for the following to the ID, symbol, logFC, and FDR
+arguments:
 \tabular{ll}{
 \code{ID} \tab Character vector with the feature ID (i.e. EnsemblID) \cr
 \tab \cr
 \code{symbol} \tab Optional character vector with gene symbol for labels \cr
 \tab \cr
-\code{LogFC} \tab Numeric with the logFC \cr
+\code{logFC} \tab Numeric with the logFC \cr
 \tab \cr
-\code{FDR} \tab Numeric with the FDR \cr
+\code{adj.P.Val} \tab Numeric with the FDR \cr
 }
-
 The correlation coefficient is useful for comparing across multiple plots.
-It's important to consider whether there are any common factors when
-comparing values, since that can result in a larger value.
+However, it is important to consider whether there are any common factors
+when comparing values, since that can result in a larger value. Some
+examples are contrasts with covariates that are shared between groups
+or contrasts with the same control group.
 }
 \examples{
 data("airwayFit")

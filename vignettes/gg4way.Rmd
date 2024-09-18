@@ -103,7 +103,7 @@ efit <- dge |>
 
 Finally, we create a 4way plot comparing the logFC for all genes in the two contrasts.
 
-```{r limmaPlot, fig.cap="gg4way from limma", fig.width=6, fig.height=6.5}
+```{r limmaPlot, fig.cap="gg4way from limma", fig.width=6, fig.height=6.5, dpi=50}
 library("gg4way")
 
 p1 <- efit |>
@@ -146,9 +146,9 @@ p1 |>
 
 ## Plotting labels
 
-Gene symbols can be added to the plot through the `label` argument. Setting it to `TRUE` will plot all the genes colored blue, while specific genes can be labelled by providing their symbol. Below, two of the genes from the above table are plotted.
+Gene symbols can be added to the plot through the `label` argument. Setting it to `TRUE` will plot all the genes colored blue, while specific genes can be labelled by providing their symbol. Below, two of the genes from the above table are labelled in the plot.
 
-```{r labelsPlot, fig.cap="gg4way with labels", fig.width=6, fig.height=6.5}
+```{r labelsPlot, fig.cap="gg4way with labels", fig.width=6, fig.height=6.5, dpi=50}
 efit |>
     gg4way(x = "N61311 vs N052611",
            y = "N061011 vs N052611",
@@ -161,7 +161,7 @@ efit |>
 
 The axis titles can be further customized through ggplot2.
 
-```{r titlesPlot, fig.cap="gg4way with custom axis titles", fig.width=6, fig.height=6.5}
+```{r titlesPlot, fig.cap="gg4way with custom axis titles", fig.width=6, fig.height=6.5, dpi=50}
 p1 +
     xlab(expression(atop(
         paste("Higher in Line 2" %<->% "Higher in Line 1"),
@@ -184,7 +184,7 @@ p1 |>
 
 In addition to the output of limma, the functions are also compatible with edgeR and  DESeq2. If a user is starting here, they will first have to run the [Prepare data] and [limma-voom] subsections in the Quick start: limma section. The output from `edgeR::glmQLFTest()`, `edgeR::glmTreat()`, and `edgeR::glmLRT()` is supported.
 
-```{r edgeRplot, fig.cap="gg4way from edgeR", fig.width=6, fig.height=6.5}
+```{r edgeRplot, fig.cap="gg4way from edgeR", fig.width=6, fig.height=6.5, dpi=50}
 library("purrr")
 
 rfit <- dge |>
@@ -231,7 +231,7 @@ dds <- ddsSE |>
 
 ## Plot by results name
 
-```{r DESeq2plot, fig.cap="gg4way from DESeq2", fig.width=6, fig.height=6.5}
+```{r DESeq2plot, fig.cap="gg4way from DESeq2", fig.width=6, fig.height=6.5, dpi=50}
 dds |>
     gg4way(x = "N61311 vs N052611",
            y = "N061011 vs N052611")
@@ -239,9 +239,9 @@ dds |>
 
 ## Plot by contrast
 
-Although not shown, the same result as above can be obtained through the `contrast` argument of `DESeq2::results()`. This approach also allows the user to set the `lfcThreshold` in `DESeq2::results()`.
+The same result as above can be obtained through the `contrast` argument of `DESeq2::results()`, where you can also specify the `lfcThreshold`.
 
-```{r DESeq2 contrast example, fig.show = "hide"}
+```{r DESeq2plot2, fig.cap="gg4way from DESeq2 contrast", fig.width=6, fig.height=6.5, dpi=50}
 list("N61311 vs N052611" = c("cell", "N61311", "N052611"),
      "N061011 vs N052611" = c("cell", "N061011", "N052611")) |>
     map(~ results(dds, contrast = .x)) |>
@@ -253,22 +253,19 @@ list("N61311 vs N052611" = c("cell", "N61311", "N052611"),
 
 Finally, the output of `DESeq2::lfcShrink()` can also be plotted.
 
-```{r DESeq2plot2, fig.cap="gg4way from DESeq2 lfcShrink", fig.width=6, fig.height=6.5}
+```{r DESeq2plot3, fig.cap="gg4way from DESeq2 lfcShrink", fig.width=6, fig.height=6.5, dpi=50}
 list("N61311 vs N052611" = c("cell", "N61311", "N052611"),
      "N061011 vs N052611" = c("cell", "N061011", "N052611")) |>
     map(~ dds |>
         results(contrast = .x) |>
         lfcShrink(dds, contrast = .x, res = _, type = "normal")) |>
     gg4way(x = "N61311 vs N052611",
-           y = "N061011 vs N052611",
-           symbol = "ID",
-           logFC = "log2FoldChange",
-           FDR = "padj")
+           y = "N061011 vs N052611")
 ```
 
 # Other packages
 
-gg4way is not limited to input from limma, edgeR, or DESeq2. It only requires a list of data frames (or tibbles) with columns containing the ID, LogFC, and FDR. The symbol column is optional and used for the plot labels. It enables cases where not every feature has a (unique) gene ID.
+gg4way is not limited to input from limma, edgeR, or DESeq2. It also works with a named list of data.frames, where the names correspond to the `x` and `y` arguments. The separator between groups in the names of the list can be specified using the `sep` argument. Each data.frame should have columns corresponding to values provided to the `ID`, `logFC`, and `FDR` arguments. The `symbol` column is optional and used for the plot labels. This enables cases where not every feature has a (unique) gene ID. If the `symbol` column is not present then the argument should be given the `ID` column. The default values for the arguments can be seen in the documentation through `?gg4way()`.
 
 # Package support
 

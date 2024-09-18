@@ -21,24 +21,24 @@
 )
 }
 \arguments{
-\item{x}{Character specifying name of DGE results within object
+\item{x}{Character specifying the name of DGE results within the object
 for the x-axis}
 
-\item{y}{Character specifying name of DGE results within object
+\item{y}{Character specifying the name of DGE results within the object
 for the y-axis}
 
 \item{sep}{Character specifying the separator between conditions
-for the contrast}
+for the contrast name provided to the x and y arguments}
 
-\item{logFCcutoff}{Numeric for the absolute Log2FC cut-off for DEGs,
-default is 1}
+\item{logFCcutoff}{Numeric for the absolute logFC cut-off for DEGs
+(default is 1)}
 
 \item{lineColor}{Color of lines}
 
 \item{textSize}{Numeric specifying size of text with gene
-overlap category totals}
+overlap category totals, where 0 will remove the text}
 
-\item{label}{Character vector specifying genes to label
+\item{label}{Character vector specifying the symbols of genes to label
 (FALSE for none, TRUE for all blue)}
 }
 \value{

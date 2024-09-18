@@ -7,11 +7,11 @@
 .tidyLabel(label = NULL, sep = " vs ", labelType = c("x", "y"))
 }
 \arguments{
-\item{label}{Character vector specifying genes to label
+\item{label}{Character vector specifying the symbols of genes to label
 (FALSE for none, TRUE for all blue)}
 
 \item{sep}{Character specifying the separator between conditions
-for the contrast}
+for the contrast name provided to the x and y arguments}
 }
 \value{
 A \link[base]{call}
