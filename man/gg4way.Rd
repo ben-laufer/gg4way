@@ -21,10 +21,11 @@
   FDRcutoff = 0.05,
   logFCcutoff = 1,
   label = FALSE,
+  textSize = 11,
+  textNudge = 0.25,
+  labelSize = textSize,
   colorVector = c("grey80", "firebrick", "forestgreen", "mediumblue"),
   lineColor = "grey60",
-  textSize = 4,
-  textNudge = 0.25,
   ...
 )
 }
@@ -69,17 +70,19 @@ for the contrast name provided to the x and y arguments}
 \item{label}{Character vector specifying the symbols of genes to label
 (FALSE for none, TRUE for all blue)}
 
-\item{colorVector}{Character vector of colors in the following order:
-"not significant", "significant in x", "significant in y",
-"significant in both"}
-
-\item{lineColor}{Color of lines}
-
 \item{textSize}{Numeric specifying size of text with gene
 overlap category totals, where 0 will remove the text}
 
 \item{textNudge}{Numeric specifying nudge of text with gene
 overlap category totals}
+
+\item{labelSize}{Numeric specifying size of text with gene labels}
+
+\item{colorVector}{Character vector of colors in the following order:
+"not significant", "significant in x", "significant in y",
+"significant in both"}
+
+\item{lineColor}{Color of lines}
 
 \item{...}{Support for additional arguments used internally by
 \code{gg4way.MArrayLM}, \code{gg4way.list},
