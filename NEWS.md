@@ -1,3 +1,7 @@
+# gg4way 1.6.1
+
+* Updates for new major version of ggplot2 and other minor improvements
+
 # gg4way 1.3.1
 
 * Helper functions to check DGEdata and a visual unit test

@@ -32,14 +32,15 @@
 #'  (default is 1)
 #' @param label Character vector specifying the symbols of genes to label
 #'  (FALSE for none, TRUE for all blue)
-#' @param colorVector Character vector of colors in the following order:
-#' "not significant", "significant in x", "significant in y",
-#'  "significant in both"
-#' @param lineColor Color of lines
 #' @param textSize Numeric specifying size of text with gene
 #'  overlap category totals, where 0 will remove the text
 #' @param textNudge Numeric specifying nudge of text with gene
 #'  overlap category totals
+#' @param labelSize Numeric specifying size of text with gene labels
+#' @param colorVector Character vector of colors in the following order:
+#' "not significant", "significant in x", "significant in y",
+#'  "significant in both"
+#' @param lineColor Color of lines
 #' @param ... Support for additional arguments used internally by
 #'  \code{gg4way.MArrayLM}, \code{gg4way.list},
 #'  and \code{gg4way.DESeqDataSet}
@@ -92,11 +93,12 @@ gg4way.default <- function(DGEdata,
                            FDRcutoff = 0.05,
                            logFCcutoff = 1,
                            label = FALSE,
+                           textSize = 11,
+                           textNudge = 0.25,
+                           labelSize = textSize,
                            colorVector = c("grey80", "firebrick",
                                            "forestgreen", "mediumblue"),
                            lineColor = "grey60",
-                           textSize = 4,
-                           textNudge = 0.25,
                            ...) {
     stopifnot(!is.null(x) | !is.null((y)))
     if (is.null(symbol)) {
@@ -156,7 +158,8 @@ gg4way.default <- function(DGEdata,
                     hjust = hjust,
                     vjust = vjust,
                     textSize = textSize,
-                    label = label)
+                    label = label,
+                    labelSize = labelSize)
 
     class(p1) <- c("gg4way", class(p1))
 

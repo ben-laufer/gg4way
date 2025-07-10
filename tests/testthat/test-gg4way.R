@@ -46,6 +46,6 @@ test_that("plot works", {
     airwayFit |>
         gg4way(x = "N61311 vs N052611",
                y = "N061011 vs N052611") %T>%
-        expect_s3_class("ggplot") |>
+        {expect_true(is_ggplot(.))} |>
         expect_doppelganger("plot", fig = _)
 })

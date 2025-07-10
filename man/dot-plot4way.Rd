@@ -17,7 +17,8 @@
   hjust = hjust,
   vjust = vjust,
   textSize = textSize,
-  label = label
+  label = label,
+  labelSize = labelSize
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ overlap category totals, where 0 will remove the text}
 
 \item{label}{Character vector specifying the symbols of genes to label
 (FALSE for none, TRUE for all blue)}
+
+\item{labelSize}{Numeric specifying size of text with gene labels}
 }
 \value{
 A \link[ggplot2]{ggplot}

@@ -291,7 +291,7 @@
 #' @importFrom rlang expr
 #' @importFrom purrr flatten_chr
 #' @importFrom scales alpha
-#' @importFrom ggrepel geom_label_repel
+#' @importFrom ggrepel geom_label_repel geom_text_repel
 #'
 .plot4way <- function(DGEtibble = DGEtibble,
                       x = x,
@@ -305,7 +305,8 @@
                       hjust = hjust,
                       vjust = vjust,
                       textSize = textSize,
-                      label = label){
+                      label = label,
+                      labelSize = labelSize){
     p1 <- DGEtibble |>
         dplyr::mutate(alpha = dplyr::case_match(Significant,
                                                 "Not Significant" ~ 0.5,
@@ -315,7 +316,9 @@
                                      y = DGEtibble |>
                                          purrr::pluck(paste(y, "LogFC")),
                                      color = Significant)) +
-        ggplot2::geom_point(ggplot2::aes(alpha = alpha), size = 1) +
+        ggplot2::geom_point(ggplot2::aes(alpha = alpha),
+                            size = 1,
+                            show.legend = TRUE) +
         ggplot2::geom_vline(xintercept = c(-logFCcutoff, logFCcutoff),
                             linetype = "dashed",
                             color = lineColor) +
@@ -345,12 +348,12 @@
                                          label = n,
                                          hjust = hjust,
                                          vjust = vjust),
-                            size = textSize,
+                            size = textSize/.pt,
                             alpha = 0.1,
                             fill = NA,
                             show.legend = FALSE,
                             label.padding = ggplot2::unit(0.1, "lines"),
-                            label.size = NA) +
+                            linewidth = NA) +
         ggplot2::scale_alpha(range = c(0.5, 0.6),
                              guide = "none")
 
@@ -362,17 +365,15 @@
         }
 
         p1 <- p1 +
-            ggrepel::geom_label_repel(
+            ggrepel::geom_text_repel(
                 data = DGEtibble |>
                     dplyr::mutate(symbol = dplyr::case_match(symbol,
                                                              label ~ symbol,
                                                              .default = "")),
                 ggplot2::aes(label = symbol),
+                size = labelSize/.pt,
                 arrow = grid::arrow(length = ggplot2::unit(0.01, "npc")),
                 min.segment.length = ggplot2::unit(0, "npc"),
-                fill = scales::alpha("white", 0.4),
-                label.padding = ggplot2::unit(0.01, "lines"),
-                label.size = NA,
                 show.legend = FALSE,
                 max.overlaps = Inf)
     }
