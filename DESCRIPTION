@@ -1,6 +1,6 @@
 Package: gg4way
 Title: 4way Plots of Differential Expression
-Version: 1.7.1
+Version: 1.8.0
 Authors@R: c(
     person(given = c("Benjamin", "I"),
            family = "Laufer",
